@@ -88,6 +88,7 @@ public class ContactDAO {
             pstm.setInt(4, contact.getId());
             // execute the query
             pstm.execute();
+            System.out.println("Contact Updated Successfully! ");
 
         } catch (Exception e){
             e.printStackTrace();

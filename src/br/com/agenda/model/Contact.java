@@ -2,9 +2,11 @@ package br.com.agenda.model;
 
 import java.util.Date;
 
+
+
+
 public class Contact {
     // model class for contacts
-
 
     private int id;
     private String nome;

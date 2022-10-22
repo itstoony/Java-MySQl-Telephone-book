@@ -2,7 +2,6 @@ package br.com.agenda.application;
 
 import br.com.agenda.dao.ContactDAO;
 import br.com.agenda.model.Contact;
-
 import java.util.Date;
 
 public class Main {
@@ -29,6 +28,7 @@ public class Main {
         c1.setIdade(71);
         c1.setDataCadastro(new Date());
         c1.setId(2); // auto-increment id from database
+
 
         contadoDAO.update(c1);
         // check all data from database
