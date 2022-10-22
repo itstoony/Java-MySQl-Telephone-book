@@ -42,6 +42,7 @@ public class ContactDAO {
             pstm.setDate(3, new Date(contact.getDataCadastro().getTime()));
             // execute the query
             pstm.execute();
+            System.out.println("Contact Saved Successfully!");
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("https://github.com/itstoony");
@@ -58,7 +59,7 @@ public class ContactDAO {
                 e.printStackTrace();
             }
         }
-        System.out.println("Contact Saved Successfully!");
+
 
     }
 
