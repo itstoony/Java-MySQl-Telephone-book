@@ -12,7 +12,7 @@ public class ContactDAO {
     // DAO = Data Access Object
     /*
     * CRUD
-    * c: CREATE
+    * c: CREATE - Done!
     * r: READ
     * u: UPDATE
     * d: DELETE
