@@ -19,7 +19,6 @@ public class Main {
         contato2.setNome("Paulo Sérgio");
         contato2.setIdade(17);
         contato2.setDataCadastro(new Date());
-        // ContactDAO expects a contact as parameter
         contadoDAO.save(contato2);
 
         // Update contact
@@ -28,15 +27,17 @@ public class Main {
         c1.setIdade(71);
         c1.setDataCadastro(new Date());
         c1.setId(2); // auto-increment id from database
-
-
         contadoDAO.update(c1);
+
         // check all data from database
         for(Contact c : contadoDAO.getContacts()){
             System.out.println("Contact: " + c.getNome());
         }
 
-
-
+        // deleting contact from database by id
+        contadoDAO.deleteById(5);
+        for(Contact c : contadoDAO.getContacts()){
+            System.out.println("Contact: " + c.getNome());
+        }
     }
 }

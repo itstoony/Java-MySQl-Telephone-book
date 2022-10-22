@@ -18,7 +18,7 @@ public class ContactDAO {
     * c: CREATE - INSERT - Done!
     * r: READ - SELECT - Done!
     * u: UPDATE - UPDATE - Done!
-    * d: DELETE - DELETE
+    * d: DELETE - DELETE - Done!
     */
 
     public void save(Contact contact) {
@@ -28,7 +28,7 @@ public class ContactDAO {
         Connection conn = null;
         /*
         * AUTO-DETECTS "jdbc" BECAUSE "com.mysql.jdbc.Driver"
-        * WAS PRE-LOADED BY THE JVM IN ORDER TO MAKE JVM UNDERSTAND THAT
+        * WAS PRE-LOADED AT ConnectionFactory BY THE JVM IN ORDER TO MAKE JVM UNDERSTAND THAT
         * WE ARE WORKING WITH MySQL
         */
         PreparedStatement pstm = null;
@@ -108,6 +108,36 @@ public class ContactDAO {
         }
     }
 
+    public void deleteById(int id){
+
+        String sql = "DELETE FROM contatos WHERE id = ?";
+        // preparing connections
+        Connection conn = null;
+        PreparedStatement pstm = null;
+
+        try{
+            conn = ConnectionFactory.createConnectionToMySQL();
+            pstm = conn.prepareStatement(sql);
+            // id from method's parameter
+            pstm.setInt(1, id);
+            pstm.execute();
+            System.out.println("Deleted Successfully!");
+            // https://github.com/itstoony
+        } catch (Exception e){
+            e.printStackTrace();
+        } finally {
+            try {
+                if (conn != null){
+                    conn.close();
+                }
+                if (pstm != null){
+                    pstm.close();
+                }
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+    }
     public List<Contact> getContacts(){
 
         String sql = "SELECT * FROM contatos";
