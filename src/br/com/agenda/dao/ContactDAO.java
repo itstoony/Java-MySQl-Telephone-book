@@ -2,6 +2,7 @@ package br.com.agenda.dao;
 
 import br.com.agenda.factory.ConnectionFactory;
 import br.com.agenda.model.Contact;
+
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -10,27 +11,33 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ContactDAO {
-    // Class responsible for making the DAO Connection
-
-    // DAO = Data Access Object
-    /*
-    * CRUD
-    * c: CREATE - INSERT - Done!
-    * r: READ - SELECT - Done!
-    * u: UPDATE - UPDATE - Done!
-    * d: DELETE - DELETE - Done!
-    */
+    /**
+     * Class responsible for making the DAO Connection
+     * DAO = Data Access Object
+     * <p>
+     * CRUD
+     * c: CREATE - INSERT - Done!
+     * r: READ - SELECT - Done!
+     * u: UPDATE - UPDATE - Done!
+     * d: DELETE - DELETE - Done!
+     *
+     * @author https://github.com/itstoony
+     */
 
     public void save(Contact contact) {
+        /**
+         * Method to save data from contact in the database
+         * @param reference to the contact to be saved
+         */
         //query sql
         String sql = "INSERT INTO contatos(nome, idade, datacadastro) VALUES (?, ?, ?)";
 
         Connection conn = null;
-        /*
-        * AUTO-DETECTS "jdbc" BECAUSE "com.mysql.jdbc.Driver"
-        * WAS PRE-LOADED AT ConnectionFactory BY THE JVM IN ORDER TO MAKE JVM UNDERSTAND THAT
-        * WE ARE WORKING WITH MySQL
-        */
+        /**
+         * AUTO-DETECTS "jdbc" BECAUSE "com.mysql.jdbc.Driver"
+         * WAS PRE-LOADED AT ConnectionFactory BY THE JVM IN ORDER TO MAKE JVM UNDERSTAND THAT
+         * WE ARE WORKING WITH MySQL
+         */
         PreparedStatement pstm = null;
 
         try {
@@ -49,7 +56,7 @@ public class ContactDAO {
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("https://github.com/itstoony");
-        } finally{
+        } finally {
             // close connections
             try {
                 if (pstm != null) {
@@ -58,16 +65,17 @@ public class ContactDAO {
                 if (conn != null) {
                     conn.close();
                 }
-            } catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-
-
     }
 
-    public void update(Contact contact){
-
+    public void update(Contact contact) {
+        /**
+         * Method to update a contact previously saved in the database
+         * @param reference to the contact that will be modified
+         */
         String sql = "UPDATE contatos SET nome = ?, idade = ?, dataCadastro = ? " +
                 "WHERE id = ?";
 
@@ -81,7 +89,7 @@ public class ContactDAO {
             // Create the class to execute the query
             pstm = conn.prepareStatement(sql);
             // add the values to update
-            pstm.setString(1,contact.getNome());
+            pstm.setString(1, contact.getNome());
             pstm.setInt(2, contact.getIdade());
             pstm.setDate(3, new Date(contact.getDataCadastro().getTime()));
             // select the id to update "WHERE id"
@@ -90,9 +98,12 @@ public class ContactDAO {
             pstm.execute();
             System.out.println("Contact Updated Successfully! ");
 
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         } finally {
+            /**
+             * Only closes connection after verifying if the reference is not-null
+             */
             try {
                 if (conn != null) {
                     conn.close();
@@ -100,7 +111,6 @@ public class ContactDAO {
                 if (pstm != null) {
                     pstm.close();
                 }
-
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -108,14 +118,17 @@ public class ContactDAO {
         }
     }
 
-    public void deleteById(int id){
-
+    public void deleteById(int id) {
+        /**
+         * Delete contact using the id "AUTO-INCREMENT" in the database as reference
+         * @param reference as the id from database
+         */
         String sql = "DELETE FROM contatos WHERE id = ?";
         // preparing connections
         Connection conn = null;
         PreparedStatement pstm = null;
 
-        try{
+        try {
             conn = ConnectionFactory.createConnectionToMySQL();
             pstm = conn.prepareStatement(sql);
             // id from method's parameter
@@ -123,23 +136,30 @@ public class ContactDAO {
             pstm.execute();
             System.out.println("Deleted Successfully!");
             // https://github.com/itstoony
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         } finally {
+            /**
+             * Only closes connection after verifying if the reference is not-null
+             */
             try {
-                if (conn != null){
+                if (conn != null) {
                     conn.close();
                 }
-                if (pstm != null){
+                if (pstm != null) {
                     pstm.close();
                 }
-            } catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
     }
-    public List<Contact> getContacts(){
 
+    public List<Contact> getContacts() {
+        /**
+         * consults all contacts and returns a arraylist
+         * @return ArrayList with all contacts
+         */
         String sql = "SELECT * FROM contatos";
         // instance a array object with contact type
         List<Contact> contacts = new ArrayList<>();
@@ -150,15 +170,20 @@ public class ContactDAO {
         ResultSet rset = null;
 
         try {
-            // uses the ConnectionFactory's method to connect with the database
+            /**
+             * connects using the method "createConnectionToMySQL" from ConnectionFactory
+             */
             conn = ConnectionFactory.createConnectionToMySQL();
 
             ptsm = conn.prepareStatement(sql);
 
             rset = ptsm.executeQuery();
 
-            while(rset.next()){
-                // while there's new data in the ResultSet
+            while (rset.next()) {
+                /**
+                 * while there's still data in the "resultSet - rset", creates a new "Contact" object and adds up to the
+                 * Contact ArrayList
+                 */
                 Contact contact = new Contact();
 
                 // get id from database
@@ -169,31 +194,31 @@ public class ContactDAO {
                 contact.setIdade(rset.getInt("idade"));
                 // get registration date
                 contact.setDataCadastro(rset.getDate("dataCadastro"));
-
+                // adds up to the array
                 contacts.add(contact);
             }
 
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-        } finally{
+        } finally {
             try {
-                // close connections if they're not null
-                if(rset != null){
+                /**
+                 * Only closes connection after verifying if the reference is not-null
+                 */
+                if (rset != null) {
                     rset.close();
                 }
-                if(ptsm != null){
+                if (ptsm != null) {
                     ptsm.close();
                 }
-                if(conn != null){
+                if (conn != null) {
                     conn.close();
                 }
 
-            } catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
         return contacts;
     }
-
-
 }
